@@ -11,7 +11,7 @@ Version: 0.1a
 
 Developer: Jared Shenson
 
-Email: jared.shenson@gmail.com
+Email: jared [dot] shenson [at] gmail
 
 ###Usage
 `ruby mkappa.rb rater1.csv rater2.csv [rater3.csv...]`
