@@ -1,14 +1,16 @@
 # MezzichKappa
 ###A Ruby implementation of Mezzich's Kappa
 
-Version: 0.1a
 mkappa computes Mezzich's Kappa for measuring the inter-rater reliability
 for N raters with 1+ codes allowed per segment. For more details, see:
 
 >Mezzich JE et al. Assessment of Agreement Among Several Raters Formulating
 >Multiple Diagnoses. J Psych Res 1981 16(29):29-39.
 
+Version: 0.1a
+
 Developer: Jared Shenson
+
 Email: jared.shenson@gmail.com
 
 ###Usage
