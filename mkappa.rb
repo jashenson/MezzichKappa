@@ -77,8 +77,8 @@ unique_coding_schemes = 0
 overlap = []
 for i in 0...segment_count
     
-    code_union = []
-    code_agreements = []
+    code_union = [] # all codes supplied by all raters for segment
+    code_agreements = [] # codes agreed upon by all raters
     for j in 0...rater_count
         
         code_union += raters[j][i]
