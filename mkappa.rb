@@ -154,8 +154,13 @@ for i in 0...max_segment_count
 
     o = "#{i + 1},"
     for j in 0...rater_count
+        if raters[j][i].nil? || raters[j][i].empty?
+            o += ","
+            next
+        end
+    
         if header_row.empty?
-            o += "\"#{raters[j][i].map{|code| code + 1}.join(', ')}\","
+            o += "\"#{raters[j][i].map{|code| "c#{code + 1}"}.join(', ')}\","
         else
             o += "\"#{raters[j][i].map{|code| header_row[code]}.join(', ')}\","
         end
