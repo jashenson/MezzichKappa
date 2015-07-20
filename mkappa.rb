@@ -2,36 +2,39 @@
 ##
 ## mkappa
 ## Version: 0.2a
-## mkappa computes Mezzich's Kappa for measuring the inter-rater reliability
-## for N raters with 1+ codes allowed per segment. For more details, see:
+## mkappa computes Mezzich's kappa for measuring the inter-rater reliability
+## for N raters with 1+ codes allowed per segment.
+##
+## For more details of Mezzich's kappa, see:
 ## Mezzich JE et al. Assessment of Agreement Among Several Raters Formulating
 ## Multiple Diagnoses. J Psych Res 1981 16(29):29-39.
 ##
 ## Developer: Jared Shenson
 ## Email: jared.shenson@gmail.com
-## 
+##
 ## Usage: ruby mkappa.rb rater1.csv rater2.csv [rater3.csv...]
 ##
 ## Output: mkappa_r[# of raters]_[timestamp].csv
 ##
 ## Notes:
-## - Files must be saved as CSV, one column per possible code, one row per segment. 
+## - Files must be saved as CSV, one column per possible code, one row per segment.
 ## - Cell contents must be 0 or 1, indicating absence (0) or presence (1) of given code.
-## - A single header row may be included. It will be auto-detected and removed.
-## - May use as many raters as desired 
+## - A single header row containing column codes may be included. It will be
+## - auto-detected and used in output.
+## - May use as many raters as desired
 ## - Requires gem "Statsample" for calculation of kappa significance
 ##
 #################
 
 # Calculate the proportional agreement between two sets of rater codes
 # Input: (Array) a and b are arrays of codes, which are integers
-# Output: (Float) proportional agreement of codes given by a and b
+# Return: (Float) proportional agreement of codes given by a and b
 def prop_agreement_for_pair(a, b)
     return nil if a.empty? || b.empty?
-    
+
     code_agreements = a & b  # set intersection
     provided_codes = (a + b).uniq # set union -> unique
-    
+
     return code_agreements.count / provided_codes.count.to_f
 end
 
@@ -44,6 +47,9 @@ require 'statsample'
 # IMPORT MATH LIBRARY
 include Math
 
+# Ensure minimum of two raters' data supplied
+raise ArgumentError, "Insufficient number of rater data input files supplied. Requires >= 2, got #{ARGV.length}." if ARGV.length <= 1
+
 ## Read in rater data
 raters = []
 codes = []
@@ -51,25 +57,25 @@ ARGV.each do |file|
 
     rater_data = []
     CSV.foreach(file, {:converters => [:numeric]}) do |row|
-        
+
         # Identify header row, if present, and store its contents for output use
         if row[0].is_a?(String) && row[0].match(/[A-Za-z]/)
             codes = row if codes.empty?
             next
         end
-        
+
         # For each code in the row, check if it's marked present
         # If so, add it to the rater's marked codes
         row_data = []
         row.each_with_index do |code, idx|
             row_data << idx if code == 1
         end
-        
+
         # Add row data to rater's data stack
         rater_data << row_data
-        
+
     end
-    
+
     # Add rater data to raters' stack
     raters << rater_data
 
@@ -81,25 +87,25 @@ max_segment_count = raters.map(&:count).max
 agreements = []
 
 for i in 0...max_segment_count
-    
+
     valid_pairs = 0
     sum_prop_agreement = 0
-    
+
     for j in 0...rater_count
         for k in (j+1)...rater_count
-            
+
             # for each unique pair (j, k) of n raters, if both raters supplied codes for the segment
             # compute the proportional agreement for the pair and add to the sum
             if !raters[j][i].empty? && !raters[k][i].empty?
                 valid_pairs += 1
                 sum_prop_agreement += prop_agreement_for_pair(raters[j][i], raters[k][i])
             end
-            
+
         end
     end
-    
+
     agreements << sum_prop_agreement / valid_pairs.to_f
-    
+
 end
 
 ## Calculate Mezzich's Kappa
@@ -158,16 +164,16 @@ for i in 0...max_segment_count
             o += ","
             next
         end
-    
+
         if codes.empty?
             o += "\"#{raters[j][i].map{|code| "c#{code + 1}"}.join(', ')}\","
         else
             o += "\"#{raters[j][i].map{|code| codes[code]}.join(', ')}\","
         end
     end
-    
+
     o += agreements[i].to_s
-    
+
     output.puts o
 end
 
