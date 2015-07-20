@@ -1,0 +1,22 @@
+Input files,SampleData_Rater1.csv; SampleData_Rater2.csv
+Segments analyzed,7
+Unique coding schemes,14
+Total poportional agreement,4.133333333333334
+Observed agreement (Po),0.5904761904761905
+Expected agreement (Pc),0.29523809523809524
+
+Mezzich's Kappa,0.41891891891891897
+Standard error,0.1583364684227844
+df,6
+t,2.6458
+p,0.0382451838240625
+95% Confidence Interval,0.032 - 0.806
+
+Segment,Rater 1 Codes,Rater 2 Codes,Proportional Agreement
+1,"code2, code3","code1, code3",0.3333333333333333
+2,"code1","code1, code2",0.5
+3,"code1, code4","code1, code3, code4",0.6666666666666666
+4,"code3, code5","code3, code5",1.0
+5,"code2, code3, code4","code4",0.3333333333333333
+6,"code5","code2, code5",0.5
+7,"code1, code2, code3, code4, code5","code1, code3, code4, code5",0.8
