@@ -46,7 +46,7 @@ include Math
 
 ## Read in rater data
 raters = []
-header_row = []
+codes = []
 ARGV.each do |file|
 
     rater_data = []
@@ -54,7 +54,7 @@ ARGV.each do |file|
         
         # Identify header row, if present, and store its contents for output use
         if row[0].is_a?(String) && row[0].match(/[A-Za-z]/)
-            header_row = row if header_row.empty?
+            codes = row if codes.empty?
             next
         end
         
@@ -159,10 +159,10 @@ for i in 0...max_segment_count
             next
         end
     
-        if header_row.empty?
+        if codes.empty?
             o += "\"#{raters[j][i].map{|code| "c#{code + 1}"}.join(', ')}\","
         else
-            o += "\"#{raters[j][i].map{|code| header_row[code]}.join(', ')}\","
+            o += "\"#{raters[j][i].map{|code| codes[code]}.join(', ')}\","
         end
     end
     
